@@ -48,6 +48,26 @@ def getHtml(url):
         print("Error: {0}".format(ex))
         return None
 
+def parse(rawHtml):
+    parser = etree.HTMLParser()
+    document = etree.parse(StringIO(rawHtml), parser)
+    container = CSSSelector("div.pubItems")(document)[0]
+    articleList = list()
+
+    for newsItem in container:
+        for prop in newsItem:
+            if prop.get("class") == "pubThumbnail":   thumbnail = prop.get("style")
+            elif prop.get("class") == "pubDate":      date      = prop.text
+            elif prop.get("class") == "pubCategory":  category  = prop.text
+            elif prop.get("class") == "pubTitle":     title     = prop.text
+            elif prop.get("class") == "pubSummary":   summary   = prop.text
+            elif prop.get("class") == "pubLink":      url       = prop.get("href")
+
+        article = Article(thumbnail, date, category, summary, title, url)
+        articleList.append(article)
+    
+    return articleList
+
 # Construct an opener with User-Agent headers
 constructOpener()
 
@@ -59,20 +79,7 @@ if result == None:
 
 # Parse the URL and feed raw HTML
 print("Parsing url...")
-parser = etree.HTMLParser()
-document = etree.parse(StringIO(result), parser)
-container = CSSSelector("div.pubItems")(document)[0]
-for newsItem in container:
-    for prop in newsItem:
-        if prop.get("class") == "pubThumbnail": thumbnail = prop.get("style")
-        elif prop.get("class") == "pubDate":      date      = prop.text
-        elif prop.get("class") == "pubCategory":  category  = prop.text
-        elif prop.get("class") == "pubTitle":     title     = prop.text
-        elif prop.get("class") == "pubSummary":   summary   = prop.text
-        elif prop.get("class") == "pubLink":      url       = prop.get("href")
-
-    article = Article(thumbnail, date, category, summary, title, url)
-    articles.append(article)
+articles = parse(result)
 
 for i in range(0, len(articles)):
     article = articles[i]
