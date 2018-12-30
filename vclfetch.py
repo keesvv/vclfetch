@@ -73,3 +73,5 @@ for i in range(0, len(thumbs)):
     # Retrieve the thumbnail from the server
     urllib.urlretrieve(result, "thumb{0}.jpg".format(i))
 
+print("Done!")
+
