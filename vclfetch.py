@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import re
 import urllib.request as urllib
 from html.parser import HTMLParser
