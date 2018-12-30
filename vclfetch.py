@@ -2,9 +2,13 @@ import re
 import urllib.request as urllib
 from html.parser import HTMLParser
 
+# The URL to fetch the latest news from
 url = "https://www.vcl-school.nl/Actueel"
+
+# List of thumbnails
 thumbs = list()
 
+# Yes, I am aware this looks horrible
 class Parser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         for i in attrs:
@@ -13,13 +17,8 @@ class Parser(HTMLParser):
                     if i[0] == "style":
                        thumbs.append(i[1])
 
-    def handle_endtag(self, tag):
-        #print("Encountered an end tag :", tag)
-        a = None
-
-    def handle_data(self, data):
-        #print("Encountered some data  :", data)
-        a = None
+    #def handle_endtag(self, tag):
+    #def handle_data(self, data):
 
 def constructOpener():
     opener = urllib.build_opener()
@@ -37,7 +36,7 @@ def getRequest(url):
 
     return req
 
-def curl(url):
+def getHtml(url):
     try:
         req = getRequest(url)
         sock = urllib.urlopen(req)
@@ -48,24 +47,29 @@ def curl(url):
         print("Error: {0}".format(ex))
         return None
 
+# Construct an opener with User-Agent headers
 constructOpener()
 
-result = curl(url)
+# Get the raw HTML
+result = getHtml(url)
+result = result.decode("utf-8")
+
 if result == None:
     exit()
 
-result = result.decode("utf-8")
-
+# Parse the URL and feed raw HTML
 print("Parsing url...")
 parser = Parser()
 parser.feed(result)
 
+# Download thumbnails
 print("Downloading thumbs...")
 for i in range(0, len(thumbs)):
     print("    [-] Downloading {0} of {1}...".format(i, len(thumbs)))
     thumb = thumbs[i]
     regex = re.compile("'(.*)'")
     result = regex.search(thumb).group(1)
-
+    
+    # Retrieve the thumbnail from the server
     urllib.urlretrieve(result, "thumb{0}.jpg".format(i))
 
