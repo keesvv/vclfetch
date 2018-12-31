@@ -7,6 +7,12 @@
 If you run `./vclfetch.py`, you'll get a result which looks like this:
 ```
 {
+    "agenda": [
+        {
+          "date": null,
+          "name": "(...)"
+        }
+    ],
     "messages": [
         {
             "category": "(...)",
