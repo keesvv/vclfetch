@@ -9,8 +9,10 @@ from lxml.cssselect import CSSSelector
 # The URL to fetch the latest news from
 news_url = "https://www.vcl-school.nl/Actueel"
 
-# List of articles
-articles = []
+# List of data
+data = {
+    "news": []
+}
 
 def constructOpener():
     opener = urllib.build_opener()
@@ -47,14 +49,17 @@ def parse(rawHtml):
 
     for newsItem in container:
         for prop in newsItem:
-            if prop.get("class") == "pubThumbnail":   thumbnail = prop.get("style")
+            if prop.get("class") == "pubThumbnail":
+                rawStyle = prop.get("style")
+                regex = re.compile("'(.*)'")
+                thumbnail = regex.search(styleObj).group(1)
+
             elif prop.get("class") == "pubDate":      date      = prop.text
             elif prop.get("class") == "pubCategory":  category  = prop.text
             elif prop.get("class") == "pubTitle":     title     = prop.text
             elif prop.get("class") == "pubSummary":   summary   = prop.text
             elif prop.get("class") == "pubLink":      url       = prop.get("href")
 
-        #article = Article(thumbnail, date, category, summary, title, url)
         article = {
             "thumbnail": thumbnail,
             "date": date,
@@ -63,6 +68,7 @@ def parse(rawHtml):
             "title": title,
             "url": url
         }
+
         articleList.append(article)
     
     return articleList
@@ -77,8 +83,8 @@ if result == None:
     exit()
 
 # Parse the URL and feed raw HTML
-articles = parse(result)
-print(json.dumps(articles, indent=4, sort_keys=True))
+data["news"] = parse(result)
+print(json.dumps(data, indent=4, sort_keys=True))
 
 # Download thumbnails
 #print("Downloading thumbs...")
