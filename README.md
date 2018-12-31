@@ -1,4 +1,6 @@
 # vclfetch
+![VCL Logo](https://www.vcl-school.nl/Portals/_default/Skins/VCL/images/logo_vcl.png)
+
 🐬 A tiny Python script for fetching the latest news from [vcl-school.nl](https://www.vcl-school.nl/) (Vrijzinnig-Christelijk Lyceum).
 
 # Getting started
