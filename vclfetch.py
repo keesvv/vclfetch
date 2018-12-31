@@ -86,15 +86,3 @@ if result == None:
 data["news"] = parse(result)
 print(json.dumps(data, indent=4, sort_keys=True))
 
-# Download thumbnails
-#print("Downloading thumbs...")
-#for i in range(0, len(thumbs)):
-#    print("    [-] Downloading {0} of {1}...".format(i, len(thumbs)))
-#    thumb = thumbs[i]
-#    regex = re.compile("'(.*)'")
-#    result = regex.search(thumb).group(1)
-#    
-#    # Retrieve the thumbnail from the server
-#    urllib.urlretrieve(result, "thumb{0}.jpg".format(i))
-#
-
