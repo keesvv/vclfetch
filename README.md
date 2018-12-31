@@ -1,5 +1,5 @@
 # vclfetch
-A tiny Python script for fetching the latest news from [vcl-school.nl](https://www.vcl-school.nl/) (Vrijzinnig-Christelijk Lyceum).
+🐬 A tiny Python script for fetching the latest news from [vcl-school.nl](https://www.vcl-school.nl/) (Vrijzinnig-Christelijk Lyceum).
 
 # Getting started
 If you run `./vclfetch.py`, you'll get a result which looks like this:
