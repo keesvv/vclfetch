@@ -1,25 +1,7 @@
-import re
-import datetime
+import helper
 from io import StringIO
 from lxml import etree
 from lxml.cssselect import CSSSelector
-
-def getThumbnail(prop):
-    rawStyle = prop.get("style")
-    regex = re.compile("'(.*)'")
-    thumbnail = regex.search(rawStyle).group(1)
-    return thumbnail
-
-def getDateFormat(dateStr):
-    date = datetime.datetime.strptime(dateStr, '%d-%m-%Y')
-    dateInfo = {
-        "year": date.strftime("%Y"),
-        "month": date.strftime("%-m"),
-        "day": date.strftime("%-d"),
-        "fullDate": dateStr
-    }
-
-    return dateInfo
 
 def parse(rawHtml):
     parser = etree.HTMLParser()
@@ -33,8 +15,8 @@ def parseNews(rawHtml):
 
     for newsItem in container:
         for prop in newsItem:
-            if prop.get("class") == "pubThumbnail":   thumbnail = getThumbnail(prop)
-            elif prop.get("class") == "pubDate":      date      = getDateFormat(prop.text)
+            if prop.get("class") == "pubThumbnail":   thumbnail = helper.getThumbnail(prop)
+            elif prop.get("class") == "pubDate":      date      = helper.getDateFormat(prop.text)
             elif prop.get("class") == "pubCategory":  category  = prop.text
             elif prop.get("class") == "pubTitle":     title     = prop.text
             elif prop.get("class") == "pubSummary":   summary   = prop.text
@@ -60,8 +42,8 @@ def parseMessages(rawHtml):
 
     for messageItem in container:
         for prop in messageItem:
-            if prop.get("class") == "pubThumbnail":  thumbnail = getThumbnail(prop)
-            elif prop.get("class") == "pubDate":     date      = getDateFormat(prop.text)
+            if prop.get("class") == "pubThumbnail":  thumbnail = helper.getThumbnail(prop)
+            elif prop.get("class") == "pubDate":     date      = helper.getDateFormat(prop.text)
             elif prop.get("class") == "pubCategory": category  = prop.text
             elif prop.get("class") == "pubTitle":    title     = prop.text
             elif prop.get("class") == "pubSummary":  summary   = prop.text

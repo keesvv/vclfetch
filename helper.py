@@ -1,4 +1,6 @@
 import urllib.request as urllib
+import re
+import datetime
 
 def constructOpener():
     opener = urllib.build_opener()
@@ -18,4 +20,21 @@ def getHtml(url):
     except Exception as ex:
         print("Error: {0}".format(ex))
         return None
+
+def getDateFormat(dateStr):
+    date = datetime.datetime.strptime(dateStr, '%d-%m-%Y')
+    dateInfo = {
+        "year": date.strftime("%Y"),
+        "month": date.strftime("%-m"),
+        "day": date.strftime("%-d"),
+        "fullDate": dateStr
+    }
+
+    return dateInfo
+
+def getThumbnail(prop):
+    rawStyle = prop.get("style")
+    regex = re.compile("'(.*)'")
+    thumbnail = regex.search(rawStyle).group(1)
+    return thumbnail
 
