@@ -9,7 +9,7 @@ from lxml.cssselect import CSSSelector
 # The URL to fetch the latest news from
 news_url = "https://www.vcl-school.nl/Actueel"
 
-# List of data
+# The data JSON object
 data = {
     "news": []
 }
@@ -23,20 +23,12 @@ def constructOpener():
 
     urllib.install_opener(opener)
 
-def getRequest(url):
-    req = urllib.Request(
-        url, 
-        data = None)
-
-    return req
-
 def getHtml(url):
     try:
-        req = getRequest(url)
-        sock = urllib.urlopen(req)
+        sock = urllib.urlopen(url)
         html = sock.read()
         sock.close()
-        return html
+        return html.decode()
     except Exception as ex:
         print("Error: {0}".format(ex))
         return None
@@ -78,7 +70,6 @@ constructOpener()
 
 # Get the raw HTML
 result = getHtml(news_url)
-result = result.decode("utf-8")
 if result == None:
     exit()
 
