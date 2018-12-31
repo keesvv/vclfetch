@@ -4,22 +4,20 @@ import parser
 import helper
 
 # The URL to fetch the latest news from
-news_url = "https://www.vcl-school.nl/Actueel"
+root = "https://www.vcl-school.nl"
+news_url = f"{root}/Actueel"
+messages_url = f"{root}/Mededelingen"
 
 # The data JSON object
-data = {
-    "news": []
-}
+data = {}
 
 # Construct an opener with User-Agent headers
 helper.constructOpener()
 
-# Get the raw HTML
-result = helper.getHtml(news_url)
-if result == None:
-    exit()
+# Parse all information
+data["news"] = parser.parseNews(helper.getHtml(news_url))
+data["messages"] = parser.parseMessages(helper.getHtml(messages_url))
 
-# Parse the URL and feed raw HTML
-data["news"] = parser.parseNews(result)
+# Print all information in indented JSON format
 print(json.dumps(data, indent=4, sort_keys=True))
 

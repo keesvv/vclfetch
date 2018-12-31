@@ -39,3 +39,6 @@ def parseNews(rawHtml):
 
     return articleList
 
+def parseMessages(rawHtml):
+    return []
+
