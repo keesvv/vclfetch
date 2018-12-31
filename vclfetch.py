@@ -1,25 +1,16 @@
 #!/usr/bin/env python3
 import re
+import json
 import urllib.request as urllib
 from io import StringIO, BytesIO
 from lxml import etree
 from lxml.cssselect import CSSSelector
 
 # The URL to fetch the latest news from
-url = "https://www.vcl-school.nl/Actueel"
+news_url = "https://www.vcl-school.nl/Actueel"
 
-# List of thumbnails
-thumbs = list()
-articles = list()
-
-class Article(object):
-    def __init__(self, thumbnail, date, category, summary, title, url):
-        self.thumbnail = thumbnail
-        self.date = date
-        self.category = category
-        self.summary = summary
-        self.title = title
-        self.url = url
+# List of articles
+articles = []
 
 def constructOpener():
     opener = urllib.build_opener()
@@ -63,7 +54,15 @@ def parse(rawHtml):
             elif prop.get("class") == "pubSummary":   summary   = prop.text
             elif prop.get("class") == "pubLink":      url       = prop.get("href")
 
-        article = Article(thumbnail, date, category, summary, title, url)
+        #article = Article(thumbnail, date, category, summary, title, url)
+        article = {
+            "thumbnail": thumbnail,
+            "date": date,
+            "category": category,
+            "summary": summary,
+            "title": title,
+            "url": url
+        }
         articleList.append(article)
     
     return articleList
@@ -72,32 +71,24 @@ def parse(rawHtml):
 constructOpener()
 
 # Get the raw HTML
-result = getHtml(url)
+result = getHtml(news_url)
 result = result.decode("utf-8")
 if result == None:
     exit()
 
 # Parse the URL and feed raw HTML
-print("Parsing url...")
 articles = parse(result)
-
-for i in range(0, len(articles)):
-    article = articles[i]
-    format = "{0}\n{1}\n{2}\n".format(article.date, article.title, article.url)
-    print(format)
-
-exit()
+print(json.dumps(articles, indent=4, sort_keys=True))
 
 # Download thumbnails
-print("Downloading thumbs...")
-for i in range(0, len(thumbs)):
-    print("    [-] Downloading {0} of {1}...".format(i, len(thumbs)))
-    thumb = thumbs[i]
-    regex = re.compile("'(.*)'")
-    result = regex.search(thumb).group(1)
-    
-    # Retrieve the thumbnail from the server
-    urllib.urlretrieve(result, "thumb{0}.jpg".format(i))
-
-print("Done!")
+#print("Downloading thumbs...")
+#for i in range(0, len(thumbs)):
+#    print("    [-] Downloading {0} of {1}...".format(i, len(thumbs)))
+#    thumb = thumbs[i]
+#    regex = re.compile("'(.*)'")
+#    result = regex.search(thumb).group(1)
+#    
+#    # Retrieve the thumbnail from the server
+#    urllib.urlretrieve(result, "thumb{0}.jpg".format(i))
+#
 
