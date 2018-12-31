@@ -3,9 +3,13 @@ from io import StringIO
 from lxml import etree
 from lxml.cssselect import CSSSelector
 
-def parseNews(rawHtml):
+def parse(rawHtml):
     parser = etree.HTMLParser()
     document = etree.parse(StringIO(rawHtml), parser)
+    return document
+
+def parseNews(rawHtml):
+    document = parse(rawHtml)
     container = CSSSelector("div.pubItems")(document)[0]
     articleList = list()
 
