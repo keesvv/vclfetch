@@ -62,3 +62,21 @@ def parseMessages(rawHtml):
 
     return messageList
 
+def parseAgenda(rawHtml):
+    document = parse(rawHtml)
+    agendaItems = CSSSelector("div.EventDayScroll div a")(document)
+    itemsList = list()
+
+    for agendaItem in agendaItems:
+        name = agendaItem.text
+        date = None
+
+        item = {
+            "name": name,
+            "date": date
+        }
+
+        itemsList.append(item)
+
+    return itemsList
+
