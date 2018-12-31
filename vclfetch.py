@@ -2,7 +2,7 @@
 import re
 import json
 import urllib.request as urllib
-from io import StringIO, BytesIO
+from io import StringIO
 from lxml import etree
 from lxml.cssselect import CSSSelector
 
@@ -52,7 +52,7 @@ def parse(rawHtml):
             if prop.get("class") == "pubThumbnail":
                 rawStyle = prop.get("style")
                 regex = re.compile("'(.*)'")
-                thumbnail = regex.search(styleObj).group(1)
+                thumbnail = regex.search(rawStyle).group(1)
 
             elif prop.get("class") == "pubDate":      date      = prop.text
             elif prop.get("class") == "pubCategory":  category  = prop.text
